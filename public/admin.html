@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zypher's — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sand: #EDE6D8; --bottle: #33463A; --ink: #2A2521; --ink-soft: #55493C;
+    --amber: #C98A3E; --line: rgba(42,37,33,0.14); --paper: #FBF8F2;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:'Karla', sans-serif; background: var(--sand); color: var(--ink); }
+  h1 { font-family:'Fraunces', serif; font-weight:600; }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 40px 24px; }
+
+  #login-screen { max-width: 360px; margin: 100px auto; text-align:center; }
+  #login-screen input {
+    width: 100%; padding: 12px; margin: 16px 0; border: 1px solid var(--line);
+    border-radius: 2px; font-size: 1rem;
+  }
+  #login-screen button, .action-btn, #logout-btn {
+    background: var(--ink); color: var(--paper); border: none; padding: 10px 18px;
+    border-radius: 2px; font-weight: 600; cursor: pointer; font-size: 0.9rem;
+  }
+  #login-screen button:hover, .action-btn:hover, #logout-btn:hover { background: var(--bottle); }
+  #login-error { color: #A5453D; font-size: 0.85rem; min-height: 1.2em; }
+
+  #dashboard { display:none; }
+  .dash-head { display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; }
+
+  table { width:100%; border-collapse: collapse; background: var(--paper); }
+  th, td { text-align:left; padding: 12px 14px; border-bottom: 1px solid var(--line); font-size: 0.9rem; }
+  th { font-size: 0.75rem; text-transform:uppercase; letter-spacing:0.04em; color: var(--ink-soft); }
+  tr.status-cancelled { opacity: 0.45; }
+  .status-pill { padding: 3px 10px; border-radius: 2px; font-size: 0.78rem; font-weight:700; }
+  .status-confirmed { background: rgba(51,70,58,0.12); color: var(--bottle); }
+  .status-cancelled { background: rgba(165,69,61,0.12); color: #A5453D; }
+  .status-completed { background: rgba(201,138,62,0.15); color: var(--amber); }
+  .row-actions { display:flex; gap: 8px; }
+  .row-actions button {
+    border: 1px solid var(--line); background: transparent; padding: 5px 10px;
+    border-radius: 2px; font-size: 0.78rem; cursor:pointer; font-weight: 600;
+  }
+  .row-actions button:hover { border-color: var(--ink); }
+  #empty-state { text-align:center; padding: 60px 0; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <h1>Zypher's Admin</h1>
+  <p>Enter the admin key to view reservations.</p>
+  <input type="password" id="admin-key-input" placeholder="Admin key">
+  <button id="login-btn">Enter</button>
+  <p id="login-error"></p>
+</div>
+
+<div id="dashboard" class="wrap">
+  <div class="dash-head">
+    <h1>Reservations</h1>
+    <button id="logout-btn">Log out</button>
+  </div>
+  <div id="table-wrap"></div>
+</div>
+
+<script>
+  const loginScreen = document.getElementById('login-screen');
+  const dashboard = document.getElementById('dashboard');
+  const keyInput = document.getElementById('admin-key-input');
+  const loginBtn = document.getElementById('login-btn');
+  const loginError = document.getElementById('login-error');
+  const tableWrap = document.getElementById('table-wrap');
+
+  function getKey() { return sessionStorage.getItem('zyphersAdminKey'); }
+
+  async function loadReservations() {
+    const key = getKey();
+    const res = await fetch('/api/admin/reservations', { headers: { 'X-Admin-Key': key } });
+    if (!res.ok) {
+      sessionStorage.removeItem('zyphersAdminKey');
+      showLogin('That key was rejected.');
+      return;
+    }
+    const rows = await res.json();
+    renderTable(rows);
+  }
+
+  function renderTable(rows) {
+    if (!rows.length) {
+      tableWrap.innerHTML = '<div id="empty-state">No reservations yet.</div>';
+      return;
+    }
+    const body = rows.map((r) => `
+      <tr class="status-${r.status}">
+        <td>${r.date}</td>
+        <td>${r.time}</td>
+        <td>${escapeHtml(r.name)}</td>
+        <td>${escapeHtml(r.phone)}</td>
+        <td>${r.guests}</td>
+        <td>${escapeHtml(r.notes || '—')}</td>
+        <td><span class="status-pill status-${r.status}">${r.status}</span></td>
+        <td class="row-actions">
+          ${r.status !== 'confirmed' ? `<button data-action="confirmed" data-id="${r.id}">Confirm</button>` : ''}
+          ${r.status !== 'completed' ? `<button data-action="completed" data-id="${r.id}">Complete</button>` : ''}
+          ${r.status !== 'cancelled' ? `<button data-action="cancelled" data-id="${r.id}">Cancel</button>` : ''}
+        </td>
+      </tr>
+    `).join('');
+
+    tableWrap.innerHTML = `
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Time</th><th>Name</th><th>Phone</th><th>Guests</th><th>Notes</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody>${body}</tbody>
+      </table>
+    `;
+
+    tableWrap.querySelectorAll('button[data-action]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        await fetch(`/api/admin/reservations/${btn.dataset.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', 'X-Admin-Key': getKey() },
+          body: JSON.stringify({ status: btn.dataset.action }),
+        });
+        loadReservations();
+      });
+    });
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function showLogin(errorMsg) {
+    loginScreen.style.display = 'block';
+    dashboard.style.display = 'none';
+    loginError.textContent = errorMsg || '';
+  }
+  function showDashboard() {
+    loginScreen.style.display = 'none';
+    dashboard.style.display = 'block';
+    loadReservations();
+  }
+
+  loginBtn.addEventListener('click', () => {
+    const val = keyInput.value.trim();
+    if (!val) return;
+    sessionStorage.setItem('zyphersAdminKey', val);
+    showDashboard();
+  });
+  keyInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') loginBtn.click(); });
+
+  document.getElementById('logout-btn').addEventListener('click', () => {
+    sessionStorage.removeItem('zyphersAdminKey');
+    showLogin();
+  });
+
+  if (getKey()) { showDashboard(); } else { showLogin(); }
+</script>
+
+</body>
+</html>

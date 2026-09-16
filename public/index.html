@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zypher's — Cafe in Wakad, Pune</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sand: #EDE6D8;
+    --sand-2: #E4DAC7;
+    --wood: #8B5E34;
+    --wood-dark: #5E3F23;
+    --bottle: #33463A;
+    --bottle-light: #4A6152;
+    --amber: #C98A3E;
+    --ink: #2A2521;
+    --ink-soft: #55493C;
+    --paper: #FBF8F2;
+    --line: rgba(42,37,33,0.14);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+
+  body {
+    background: var(--sand);
+    color: var(--ink);
+    font-family: 'Karla', sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display:block; }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(237,230,216,0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav.wrap { display:flex; align-items:center; justify-content:space-between; height: 74px; }
+  .logo { font-family:'Fraunces', serif; font-size: 1.45rem; font-weight: 600; color: var(--ink); }
+  .logo span { color: var(--wood-dark); }
+  .nav-links { display:flex; gap: 2.2rem; font-size: 0.95rem; font-weight: 500; }
+  .nav-links a { position:relative; padding: 4px 0; }
+  .nav-links a::after {
+    content:''; position:absolute; left:0; bottom:-2px; width:0; height:2px;
+    background: var(--wood-dark); transition: width .25s ease;
+  }
+  .nav-links a:hover::after { width:100%; }
+
+  .btn {
+    display:inline-block; padding: 12px 24px; font-weight: 600; font-size: 0.92rem;
+    border: 1.5px solid var(--ink); border-radius: 2px;
+    transition: background .2s ease, color .2s ease;
+  }
+  .btn-solid { background: var(--ink); color: var(--paper); }
+  .btn-solid:hover { background: var(--wood-dark); border-color: var(--wood-dark); }
+  .btn-ghost:hover { background: var(--ink); color: var(--paper); }
+
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    display:flex;
+    align-items:flex-end;
+    background: linear-gradient(180deg, rgba(42,37,33,0.15) 0%, rgba(28,22,17,0.78) 100%), #8B5E34;
+    background-size: cover;
+    background-position: center 30%;
+  }
+  .hero-inner { color: var(--paper); padding-bottom: 70px; width:100%; }
+  .rating-tag {
+    display:inline-flex; align-items:center; gap: 8px;
+    background: rgba(251,248,242,0.12);
+    border: 1px solid rgba(251,248,242,0.35);
+    padding: 7px 14px; border-radius: 2px;
+    font-size: 0.82rem; font-weight: 600; margin-bottom: 22px;
+  }
+  .rating-tag .stars { color: var(--amber); letter-spacing: 2px; }
+  .hero h1 {
+    font-size: clamp(2.4rem, 5.2vw, 4.2rem);
+    line-height: 1.08;
+    color: var(--paper);
+    max-width: 16ch;
+    margin-bottom: 20px;
+  }
+  .hero p.lede { font-size: 1.1rem; max-width: 46ch; color: rgba(251,248,242,0.82); margin-bottom: 32px; }
+  .hero-actions { display:flex; gap: 14px; flex-wrap:wrap; }
+  .hero .btn-ghost { border-color: rgba(251,248,242,0.6); color: var(--paper); }
+  .hero .btn-ghost:hover { background: var(--paper); color: var(--ink); }
+
+  .info-strip {
+    background: var(--bottle);
+    color: var(--sand);
+    padding: 16px 0;
+  }
+  .info-strip .wrap {
+    display:flex; flex-wrap:wrap; gap: 8px 28px; justify-content:center;
+    font-size: 0.86rem; font-weight: 600;
+  }
+  .info-strip span:not(:last-child)::after { content:'·'; margin-left: 28px; color: var(--amber); }
+
+  .about { padding: 100px 0; }
+  .about-grid { display:grid; grid-template-columns: 0.95fr 1.05fr; gap: 64px; align-items:center; }
+  .eyebrow { color: var(--wood-dark); font-weight:700; font-size: 0.85rem; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .about h2 { font-size: clamp(1.9rem, 3.2vw, 2.5rem); margin-bottom: 18px; }
+  .about-copy p { margin-bottom: 16px; max-width: 56ch; color: var(--ink-soft); }
+  .about-stats { display:flex; gap: 40px; margin-top: 26px; }
+  .stat .num { font-family:'Fraunces', serif; font-size: 2.2rem; color: var(--wood-dark); line-height:1; }
+  .stat .label { font-size: 0.85rem; color: var(--ink-soft); margin-top: 4px; }
+
+  .menu-section { background: var(--paper); padding: 100px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .menu-head { max-width: 560px; margin: 0 auto 54px; text-align:center; }
+  .menu-head h2 { font-size: clamp(1.9rem, 3.2vw, 2.5rem); }
+  .menu-head p { color: var(--ink-soft); margin-top: 12px; }
+  .menu-list { max-width: 760px; margin: 0 auto; }
+  .menu-row {
+    display:flex; justify-content:space-between; gap: 24px;
+    padding: 22px 0; border-bottom: 1px solid var(--line);
+  }
+  .menu-row:first-child { border-top: 1px solid var(--line); }
+  .menu-row .mname { font-family:'Fraunces', serif; font-size: 1.15rem; color: var(--ink); margin-bottom: 4px; }
+  .menu-row .mdesc { font-size: 0.9rem; color: var(--ink-soft); max-width: 48ch; }
+  .menu-note { text-align:center; margin-top: 40px; font-size: 0.9rem; color: var(--ink-soft); }
+
+  .reviews { padding: 100px 0; }
+  .reviews-head { max-width: 560px; margin: 0 auto 50px; text-align:center; }
+  .reviews-head h2 { font-size: clamp(1.9rem, 3.2vw, 2.5rem); }
+  .reviews-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+  .review-card { background: var(--paper); border: 1px solid var(--line); border-radius: 3px; padding: 28px 24px; }
+  .review-card .stars { color: var(--amber); font-size: 0.85rem; margin-bottom: 14px; letter-spacing:2px; }
+  .review-card p.quote { font-family:'Fraunces', serif; font-style: italic; font-size: 1.05rem; margin-bottom: 18px; line-height: 1.5; }
+  .review-card .who { font-size: 0.84rem; font-weight: 700; color: var(--ink-soft); }
+  .review-card .who span { font-weight: 400; color: var(--wood-dark); }
+
+  .visit { background: var(--bottle); color: var(--sand); padding: 100px 0; }
+  .visit-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+  .visit h2 { color: var(--sand); font-size: clamp(1.9rem, 3.2vw, 2.5rem); margin-bottom: 24px; }
+  .visit .eyebrow { color: var(--amber); }
+  .info-row { display:flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(251,248,242,0.14); }
+  .info-row:first-of-type { border-top: 1px solid rgba(251,248,242,0.14); }
+  .info-row .label { font-weight:700; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.05em; color: var(--amber); margin-bottom:4px; }
+  .info-row .val { color: rgba(251,248,242,0.85); font-size: 0.95rem; }
+
+  .visit-card {
+    background: rgba(251,248,242,0.06);
+    border: 1px solid rgba(251,248,242,0.18);
+    border-radius: 3px;
+    padding: 36px;
+    scroll-margin-top: 90px;
+  }
+  .visit-card h3 { color: var(--sand); font-size: 1.5rem; margin-bottom: 10px; }
+  .visit-card > p { color: rgba(251,248,242,0.7); font-size: 0.92rem; margin-bottom: 24px; }
+  .visit-card .btn-solid { background: var(--amber); border-color: var(--amber); color: var(--ink); width:100%; text-align:center; margin-top: 6px; cursor:pointer; }
+  .visit-card .btn-solid:hover { background: var(--sand); border-color: var(--sand); }
+
+  .field-row { display:flex; gap: 14px; margin-bottom: 14px; }
+  .field { flex:1; margin-bottom: 14px; display:flex; flex-direction:column; gap: 6px; }
+  .field-row .field { margin-bottom: 0; }
+  .field-narrow { flex: 0 0 90px; }
+  .field label { font-size: 0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; color: var(--amber); }
+  .field label span { text-transform:none; font-weight:400; color: rgba(251,248,242,0.5); }
+  .field input, .field textarea {
+    background: rgba(251,248,242,0.08);
+    border: 1px solid rgba(251,248,242,0.25);
+    border-radius: 2px;
+    padding: 10px 12px;
+    color: var(--sand);
+    font-family: 'Karla', sans-serif;
+    font-size: 0.95rem;
+  }
+  .field input::placeholder, .field textarea::placeholder { color: rgba(251,248,242,0.4); }
+  .field input:focus, .field textarea:focus { outline: none; border-color: var(--amber); background: rgba(251,248,242,0.12); }
+  .field textarea { resize: vertical; }
+
+  .form-note {
+    margin-top: 14px;
+    font-size: 0.86rem;
+    min-height: 1.2em;
+  }
+  .form-note.error { color: #E39A9A; }
+  .form-note.success { color: var(--amber); }
+
+  .slot-grid { display:flex; flex-wrap:wrap; gap: 8px; margin-top: 2px; }
+  .slot-hint, .slot-empty { font-size: 0.85rem; color: rgba(251,248,242,0.5); }
+  .slot-btn {
+    font-family: 'Karla', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 2px;
+    border: 1px solid rgba(251,248,242,0.25);
+    background: rgba(251,248,242,0.06);
+    color: var(--sand);
+    cursor: pointer;
+  }
+  .slot-btn:hover:not(:disabled) { border-color: var(--amber); }
+  .slot-btn.selected { background: var(--amber); border-color: var(--amber); color: var(--ink); }
+  .slot-btn:disabled { opacity: 0.35; cursor: not-allowed; text-decoration: line-through; }
+
+  .terms { background: var(--paper); padding: 70px 0; border-bottom: 1px solid var(--line); }
+  .terms-inner { max-width: 760px; margin: 0 auto; }
+  .terms summary {
+    cursor: pointer;
+    font-family:'Fraunces', serif;
+    font-size: 1.3rem;
+    color: var(--ink);
+    list-style: none;
+    display:flex; justify-content:space-between; align-items:center;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .terms summary::-webkit-details-marker { display:none; }
+  .terms summary::after {
+    content: '+';
+    font-size: 1.6rem;
+    color: var(--wood-dark);
+    transition: transform .2s ease;
+  }
+  .terms[open] summary::after { content: '–'; }
+  .terms-body { padding-top: 22px; color: var(--ink-soft); font-size: 0.92rem; }
+  .terms-body h4 { font-family:'Karla',sans-serif; font-size: 0.95rem; color: var(--ink); margin: 20px 0 8px; }
+  .terms-body h4:first-child { margin-top: 0; }
+  .terms-body p, .terms-body li { margin-bottom: 6px; }
+  .terms-body ul { padding-left: 20px; }
+
+  footer { background: var(--ink); color: rgba(251,248,242,0.55); padding: 44px 0 26px; }
+  .footer-top {
+    display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 20px;
+    padding-bottom: 26px; border-bottom: 1px solid rgba(251,248,242,0.12); margin-bottom: 20px;
+  }
+  .footer-top .logo { color: var(--paper); }
+  .footer-top .logo span { color: var(--amber); }
+  .footer-links { display:flex; gap: 22px; font-size: 0.86rem; }
+  .footer-links a:hover { color: var(--paper); }
+  .footer-bottom { display:flex; justify-content:space-between; font-size: 0.78rem; flex-wrap: wrap; gap: 10px; }
+
+  @media (max-width: 880px) {
+    .nav-links { display:none; }
+    .about-grid, .visit-grid { grid-template-columns: 1fr; }
+    .reviews-grid { grid-template-columns: 1fr; }
+    .about-stats { gap: 26px; }
+  }
+
+  :focus-visible { outline: 2px solid var(--wood-dark); outline-offset: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a href="#top" class="logo">Zypher<span>'s</span></a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#menu">Menu</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#visit">Visit</a>
+    </div>
+    <a href="#reserve" class="btn btn-solid">Reserve a table</a>
+  </nav>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap hero-inner">
+    <div class="rating-tag"><span class="stars">★★★★★</span><span>4.7 · 1,023 Google reviews</span></div>
+    <h1>A slow corner of Wakad, built from wood and light.</h1>
+    <p class="lede">Bamboo ceilings, terrazzo floors, and a menu that moves from thecha chicken to burrata without apologizing for either. Women-owned, everyone welcome.</p>
+    <div class="hero-actions">
+      <a href="#menu" class="btn btn-solid">See the menu</a>
+      <a href="#visit" class="btn btn-ghost">Get directions</a>
+    </div>
+  </div>
+</section>
+
+<div class="info-strip">
+  <div class="wrap">
+    <span>Dine-in</span><span>Kerbside pickup</span><span>No-contact delivery</span><span>Women-owned</span><span>LGBTQ+ friendly</span><span>Open till 11:30pm</span>
+  </div>
+</div>
+
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div>
+      <div class="eyebrow">The place</div>
+      <h2>Named for the wind, built for lingering</h2>
+      <div class="about-stats">
+        <div class="stat"><div class="num">4.7</div><div class="label">Average rating</div></div>
+        <div class="stat"><div class="num">1,023</div><div class="label">Reviews</div></div>
+      </div>
+    </div>
+    <div class="about-copy">
+      <p>Zypher's sits inside Park Arcade on Park Street, a short walk from most of Wakad. The room does a lot of the talking — bamboo slat ceilings, warm wood staircases, bottle-green tile at the counter, and terrazzo underfoot.</p>
+      <p>The kitchen doesn't sit still either: thecha-marinated chicken and pesto funghi share a menu with burrata, hummus, and a rotating list of sliders. Expect ₹200–1,200 a head depending on how far you let yourself go.</p>
+    </div>
+  </div>
+</section>
+
+<section class="menu-section" id="menu">
+  <div class="wrap">
+    <div class="menu-head">
+      <div class="eyebrow">On the table</div>
+      <h2>A few things worth ordering</h2>
+      <p>Straight off the current menu — it runs longer than this.</p>
+    </div>
+    <div class="menu-list">
+      <div class="menu-row">
+        <div><div class="mname">French Butter Croissant</div><div class="mdesc">A piece of freshly baked croissant &amp; sea salt butter</div></div>
+      </div>
+      <div class="menu-row">
+        <div><div class="mname">Avocado Garden Fresh</div><div class="mdesc">Sliced avocado, balsamic glaze, pico de gallo, feta &amp; greens</div></div>
+      </div>
+      <div class="menu-row">
+        <div><div class="mname">Herb Chicken Thecha</div><div class="mdesc">Thecha-marinated chicken, thecha aioli, lettuce &amp; greens</div></div>
+      </div>
+      <div class="menu-row">
+        <div><div class="mname">Pesto &amp; Butter Garlic Funghi</div><div class="mdesc">Basil pesto, butter garlic mushrooms, Grana Padano</div></div>
+      </div>
+      <div class="menu-row">
+        <div><div class="mname">RJ's 5-Cheese Toast &amp; Hot Honey</div><div class="mdesc">Fresh dough, EVOO, bell peppers, hot honey</div></div>
+      </div>
+      <div class="menu-row">
+        <div><div class="mname">Mediterranean Hummus &amp; Grilled Vegetables</div><div class="mdesc">Seasonal grilled veggies, hummus, EVOO, olives &amp; feta</div></div>
+      </div>
+      <div class="menu-row">
+        <div><div class="mname">Burrata &amp; Sundried Tomato Balsamico</div><div class="mdesc">Burrata, sundried tomatoes, EVOO &amp; rosso pesto</div></div>
+      </div>
+      <div class="menu-row">
+        <div><div class="mname">Nashville Paneer Slider</div><div class="mdesc">Paneer fillet, chili oil, paprika, hot mayo in brioche</div></div>
+      </div>
+      <div class="menu-row">
+        <div><div class="mname">Greek Chicken Slider</div><div class="mdesc">Fried chicken fillet, caesar dressing, Grana Padano in brioche</div></div>
+      </div>
+    </div>
+    <p class="menu-note">₹200–1,200 per person, depending on what you order</p>
+  </div>
+</section>
+
+<section class="reviews" id="reviews">
+  <div class="wrap">
+    <div class="reviews-head">
+      <div class="eyebrow">What people say</div>
+      <h2>1,023 reviews, mostly about the room</h2>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p class="quote">A really good dinner &mdash; plenty of options, generous portions, and a genuinely lovely space to sit in.</p>
+        <div class="who">Suchitra S. <span>· Local Guide</span></div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p class="quote">Celebrated a friend's birthday here &mdash; great ambience, and the honey chilli sesame and fish &amp; chips didn't miss.</p>
+        <div class="who">Apurva M. <span>· Local Guide</span></div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p class="quote">Every dish had its own distinct flavour and presentation &mdash; the mandu and alfredo especially stood out.</p>
+        <div class="who">S. K. <span>· Local Guide</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="visit" id="visit">
+  <div class="wrap visit-grid">
+    <div>
+      <div class="eyebrow">Find us</div>
+      <h2>Come by Park Street</h2>
+      <div class="info-row"><div><div class="label">Address</div><div class="val">Park Arcade, 5, Park Street, Wakad, Pimpri-Chinchwad, Maharashtra 411057</div></div></div>
+      <div class="info-row"><div><div class="label">Hours</div><div class="val">Open daily &middot; closes 11:30 pm</div></div></div>
+      <div class="info-row"><div><div class="label">Price range</div><div class="val">₹200–1,200 per person</div></div></div>
+      <div class="info-row"><div><div class="label">Options</div><div class="val">Dine-in &middot; Kerbside pickup &middot; No-contact delivery</div></div></div>
+    </div>
+    <div class="visit-card" id="reserve">
+      <h3>Reserve a table</h3>
+      <p>Pick a date to see real availability, choose an open slot, and it's booked immediately &mdash; no back and forth.</p>
+      <form id="reserve-form" novalidate>
+        <div class="field-row">
+          <div class="field">
+            <label for="r-name">Name</label>
+            <input type="text" id="r-name" name="name" required placeholder="Your name">
+          </div>
+          <div class="field">
+            <label for="r-phone">Phone</label>
+            <input type="tel" id="r-phone" name="phone" required placeholder="10-digit number">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="r-date">Date</label>
+            <input type="date" id="r-date" name="date" required>
+          </div>
+          <div class="field field-narrow">
+            <label for="r-guests">Guests</label>
+            <input type="number" id="r-guests" name="guests" min="1" max="20" value="2" required>
+          </div>
+        </div>
+        <div class="field">
+          <label>Available times</label>
+          <div class="slot-grid" id="slot-grid">
+            <p class="slot-hint">Choose a date to see open tables.</p>
+          </div>
+          <input type="hidden" id="r-time" name="time" required>
+        </div>
+        <div class="field">
+          <label for="r-notes">Notes <span>(optional)</span></label>
+          <textarea id="r-notes" name="notes" rows="2" placeholder="Window seat, birthday, allergies..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-solid">Confirm reservation</button>
+        <p class="form-note" id="form-note"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="terms">
+  <div class="wrap terms-inner">
+    <details class="terms">
+      <summary>Terms &amp; Conditions</summary>
+      <div class="terms-body">
+        <h4>Reservations</h4>
+        <p>Tables are held for 15 minutes past the booked time. For parties of 5 or more, please call ahead to confirm availability, especially on weekends.</p>
+
+        <h4>Cancellations</h4>
+        <p>We ask for at least 2 hours' notice to cancel or reschedule a reservation. Repeated no-shows may affect future bookings.</p>
+
+        <h4>Payments</h4>
+        <ul>
+          <li>We accept cash, all major cards, and UPI.</li>
+          <li>Prices on the menu are subject to change without prior notice and are exclusive of applicable taxes.</li>
+          <li>A service charge, where applicable, is entirely at the customer's discretion.</li>
+        </ul>
+
+        <h4>Food &amp; allergies</h4>
+        <p>Please inform our staff of any allergies or dietary restrictions before ordering. While we take care with preparation, our kitchen handles common allergens.</p>
+
+        <h4>Delivery &amp; pickup</h4>
+        <p>Delivery times are estimates and may vary with demand, weather, or traffic. Kerbside pickup orders are held for 20 minutes before being released.</p>
+
+        <h4>Privacy</h4>
+        <p>Contact details shared for reservations are used only to confirm bookings and are not shared with third parties.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <a href="#top" class="logo">Zypher<span>'s</span></a>
+      <div class="footer-links">
+        <a href="#about">About</a>
+        <a href="#menu">Menu</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#visit">Visit</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Zypher's, Wakad. All rights reserved.</span>
+      <span>Park Arcade, 5, Park Street, Wakad, Pimpri-Chinchwad 411057</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const dateInput = document.getElementById('r-date');
+  const slotGrid = document.getElementById('slot-grid');
+  const timeField = document.getElementById('r-time');
+  const form = document.getElementById('reserve-form');
+  const note = document.getElementById('form-note');
+
+  dateInput.min = new Date().toISOString().split('T')[0];
+
+  async function loadSlots() {
+    const date = dateInput.value;
+    timeField.value = '';
+    if (!date) return;
+
+    slotGrid.innerHTML = '<p class="slot-hint">Loading availability…</p>';
+    try {
+      const res = await fetch(`/api/availability/day?date=${date}`);
+      const data = await res.json();
+      if (!res.ok) {
+        slotGrid.innerHTML = `<p class="slot-empty">${data.error || 'Could not load availability.'}</p>`;
+        return;
+      }
+      if (!data.slots.length) {
+        slotGrid.innerHTML = '<p class="slot-empty">No slots configured for this day.</p>';
+        return;
+      }
+      slotGrid.innerHTML = '';
+      data.slots.forEach((slot) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'slot-btn';
+        btn.textContent = slot.time;
+        btn.disabled = slot.tablesLeft <= 0;
+        btn.title = slot.tablesLeft > 0 ? `${slot.tablesLeft} table(s) left` : 'Fully booked';
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.slot-btn').forEach((b) => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          timeField.value = slot.time;
+        });
+        slotGrid.appendChild(btn);
+      });
+    } catch (err) {
+      slotGrid.innerHTML = '<p class="slot-empty">Could not reach the server.</p>';
+    }
+  }
+
+  dateInput.addEventListener('change', loadSlots);
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById('r-name').value.trim();
+    const phone = document.getElementById('r-phone').value.trim();
+    const date = dateInput.value;
+    const time = timeField.value;
+    const guests = document.getElementById('r-guests').value;
+    const notes = document.getElementById('r-notes').value.trim();
+
+    if (!name || !phone || !date || !time || !guests) {
+      note.textContent = 'Please fill in name, phone, date, a time slot, and guests.';
+      note.className = 'form-note error';
+      return;
+    }
+
+    note.textContent = 'Booking your table…';
+    note.className = 'form-note';
+
+    try {
+      const res = await fetch('/api/reservations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, phone, date, time, guests, notes }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        note.textContent = data.error || 'Something went wrong — please try again.';
+        note.className = 'form-note error';
+        if (res.status === 409) loadSlots();
+        return;
+      }
+
+      note.textContent = `Confirmed — reservation #${data.id}. See you on ${date} at ${time}.`;
+      note.className = 'form-note success';
+      form.reset();
+      slotGrid.innerHTML = '<p class="slot-hint">Choose a date to see open tables.</p>';
+    } catch (err) {
+      note.textContent = 'Could not reach the server.';
+      note.className = 'form-note error';
+    }
+  });
+</script>
+
+</body>
+</html>

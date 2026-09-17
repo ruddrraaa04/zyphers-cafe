@@ -4,7 +4,7 @@
   "description": "Zypher's Cafe - Website with Real Reservations",
   "main": "server/server.js",
   "scripts": {
-    "start": "cd server && node server.js"
+    "start": "npm install --prefix server && node server/server.js"
   },
   "author": "Rudra"
 }
